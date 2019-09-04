@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mysql.cj.xdevapi.Statement;
-
 import db.DB;
 import db.DbException;
 import model.dao.SellerDao;
@@ -92,7 +90,20 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			String sqlDelete = "DELETE FROM seller WHERE id = ?";
+			st = conn.prepareStatement(sqlDelete);
+			
+			st.setInt(1, id);
+			st.executeUpdate();
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 		
 	}
 
